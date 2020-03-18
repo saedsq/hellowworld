@@ -1,0 +1,328 @@
+count string length - steps taken to solve problem
+
+function countChar(str){
+//create an empty obj
+let obj = {};
+//loop over string
+for(let i = 0; i<str.length; i++){
+	//lowercase the letter
+	let char = str[i].toLowerCase();
+	//check for alphanumeric chars
+	if(/[a-z0-9]/.test(char)){
+		//if already exist then increment by 1
+		if(obj[char] > 0 ){
+		obj[char]++;
+		}else{
+		//otherwise set to 1
+		obj[char] = 1;
+		}
+
+}	
+	//return the object
+	return obj;
+
+}
+
+
+
+//2nd refactor the solution
+function countChar(str){
+//create an empty obj
+let obj = {};
+//loop over string
+for(let char of str){
+	//lowercase the letter
+	char = char.toLowerCase();
+	//check for alphanumeric chars
+	if(/[a-z0-9]/.test(char)){
+		//if already exist then increment by 1 else set to 1
+		obj[char]= ++obj[char] || 1;
+
+}	
+	//return the object
+	return obj;
+
+}
+
+
+3rd refactor
+function countChar(str){
+//create an empty obj
+let obj = {};
+//loop over string
+for(let char of str){
+	//lowercase the letter
+	char = char.toLowerCase();
+	//check for alphanumeric chars
+	if(isAlphaNumeric(char)){
+		//if already exist then increment by 1 else set to 1
+		obj[char]= ++obj[char] || 1;
+
+}	
+	//return the object
+	return obj;
+
+}
+
+function isAlphaNumeric(str){
+	
+	let code;
+	
+	code = str.charCodeAt(0);
+	if(!(code > 47 && code < 58) &&
+	!(code > 64 && code < 91 ) &&
+	!(code > 96 && code < 123)){
+		return false;
+	}
+		return true;
+}
+
+Frequency pattern = comparin two arrays to check if square of array 1 exist in array 2 and also the frequncy of array 1
+exp = [1,2,2,4] [1,4,4,16] = true 
+
+function same(arr1 , arr2){
+//check length of the 2 arrays
+if(arr1.length !== arr2.length) {
+return false;
+}
+//loop over array 1 
+for(let i = 0; i < arr1.length; i++){
+	//check if square of array 1 exist in array 2
+	let correctIndex = arr2.indexOf(arr1[i] ** 2);
+	//if the index is not found return false
+	if(correctIndex == -1){
+	return false;
+	}
+	//shrink the index from array 2
+	arr2.splice(correctIndex, 1);
+	}
+	return true;
+}
+
+solution refactored - using frequency counters pattern 
+function same(arr1, arr2){
+//check if length of 2 arrays the same
+if(arr1.length !== arr2.length){
+	return false;
+}
+//create 2 empty objects one for each array
+let frequencyCounter1 = {};
+let frequencyCounter2 = {};
+
+//loop through array 1 
+for(let val of arr1){
+	//populate obj with array values - set to 1 
+	frequencyCounter1[val]=(frequencyCounter1[val] || 0) +1;
+
+}
+
+for(let val of arr2){
+	frequencyCounter2[val]=(frequencyCounter2[val] || 0) +1;
+
+}
+//loop through keys of object
+for(let key in frequencyCounter1){
+	//if square of keys in obj1 not exist in obj2 return false
+	if(!(key ** 2 in frequencyCounter2)){
+return false;
+}
+//if frequencies of squeares in array 2 not equal to array 1 return false - exp - [1,4,4,9] !== [1,2,3]
+if(frequencyCounter2[key ** 2] !== frequencyCounter1[key]){
+
+return false;
+}
+}
+
+return true;
+
+}
+
+
+	
+
+
+}
+
+Anagram using frequency counter algorithm
+breakdown - 
+1- compare the length of two strings
+2- create an obj 
+3- loop through first string 
+4- store individual characters
+5 - store the characters in obj. if already increment otherwise set to 1.
+6- loop through second string
+7- store individual characters
+8-return false if letter doesnt exist in obj.otherwise subtract that letter from obj
+9-at the end return true
+
+function validAnagram(first,second){
+ 
+ if(first.length !== second.length){
+      
+return false;
+  
+}
+  
+  
+const lookup= {};
+  
+  
+for(let i = 0; i < first.length; i++) {
+      
+let letter = first[i];
+      
+lookup[letter] ? lookup[letter] +=1 : lookup[letter] = 1; 
+  
+}
+  
+  
+for(let i = 0; i < second.length; i++){
+      
+      
+let letter = second[i];
+      
+if(!lookup[letter]){
+          
+return false;
+      
+}else
+        
+lookup[letter] -= 1;
+  
+}
+    
+return true;  
+      
+      
+      
+  
+}
+
+
+
+Multiple Pointers- creating pointers or values that corresponds to indices and position 
+and move towars begining or middle or end based on certain direction.
+Very efficient for solving problems with minimal space complexity.
+function sumZero(arr){
+    let left =0;
+    let right = arr.length - 1;
+
+    while(left < right){
+        let sum = arr[left] + arr[right];
+        if(sum === 0){
+            return [arr[left],arr[right]];
+        }if(sum > 0 ){
+            right--;
+        }else{
+        left++;
+        }
+    }
+}
+
+
+function countUniqueValues(arr){
+
+let i = 0;
+for(let j = 1; j < arr.length; j++){
+    if(arr[i] !== arr[j]){
+        i++
+        arr[i] = arr[j];
+    }
+    console.log(j);
+}
+    return i + 1;
+
+}
+
+countUniqueValues([1,1,1,2,3,3,4,5,6,6,7]);
+
+
+Sliding window pattern -
+function maxSubarray(arr,num){
+    if(num > arr.length) {
+        return null;
+    }
+    
+    let max = -Infinity;
+
+    for(let i =0; i < arr.length - num +1; i++){
+        let temp = 0;
+        for(let  j = 0; j < num; j++){
+            temp +=arr[i + j];
+            console.log(temp);
+        }
+        if(temp > max){
+            max = temp;
+        }
+
+    }
+    return max;
+
+}
+function maxSubarrSum(arr,num){
+    let max_sum = 0;
+    let temp = 0;
+
+    if(arr.length < num ) return null;
+
+    for(let i =0; i < num; i++){
+        max_sum += arr[i];
+                
+    }
+
+    temp = max_sum;
+
+    for(let i = num; i < arr.length; i++){
+        temp = temp - arr[i - num] + arr[i];
+        max_sum = Math.max(max_sum, temp);
+    }
+    return max_sum;
+
+}
+
+maxSubarrSum([1,2,3,4,6,7,8],3);
+
+
+
+
+function remveDuplicates(cards){
+
+let uniq= [];
+	
+	cards.forEach(val => {
+
+	if(uniq.indexOf(val) === -1){
+		
+		uniq.push(val);
+	
+	}
+)}
+	return uniq;
+}
+
+console.log(removeDuplicates([1,2,3,3,5,6,5]));
+
+find pair of array whose sum equals a given number
+
+	function sum(arr, sum){
+
+	let start =0;
+	let end = arr.length -1;
+
+	while(start < end){
+
+	total = arr[start] + arr[end];
+	
+	if(total === sum){
+	
+	return [arr[start], arr[end]];
+		
+	}if(total < sum){
+		start++;
+	}else{
+		end--;
+	}
+	
+	}
+
+
